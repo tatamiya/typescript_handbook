@@ -25,12 +25,43 @@ function printCoord(pt) {
 }
 printCoord({ x: 3, y: 7 });
 function printName(obj) {
-    var _a;
     console.log("Your first name is ", obj.first.toUpperCase());
     if (obj.last !== undefined) {
         console.log("Your last name is ", obj.last.toUpperCase());
     }
-    console.log("Hi, " + ((_a = obj.last) === null || _a === void 0 ? void 0 : _a.toUpperCase()) + "!");
 }
 printName({ first: "Bob" });
 printName({ first: "Alice", last: "Alisson" });
+// Union Types
+function printId(id) {
+    if (typeof id === "string") {
+        console.log("Your ID is: " + id.toUpperCase());
+    }
+    else {
+        console.log("Your ID is: " + id);
+    }
+}
+printId(101);
+printId("202");
+// printId({ myID: 22342 }); type error!
+function welcomePeople(x) {
+    if (Array.isArray(x)) {
+        console.log("Hello, " + x.join(" and "));
+    }
+    else {
+        console.log("Welcome lone traveler " + x);
+    }
+}
+welcomePeople("hoge");
+welcomePeople(["hoge", "fuga", "piyo"]);
+function printCoord2(pt) {
+    console.log("The coordinate's x value is " + pt.x);
+    console.log("The coordinate's y value is " + pt.y);
+}
+printCoord2({ x: 100, y: 100 });
+function printCoord3(pt) {
+    console.log("The coordinate's x value is " + pt.x);
+    console.log("The coordinate's y value is " + pt.y);
+}
+printCoord3({ x: 100, y: 100 });
+// printCoord3({ x: 100, y: 100, z: 100 }); type error!

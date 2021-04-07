@@ -42,3 +42,50 @@ function printName(obj: { first: string; last?: string }) {
 }
 printName({ first: "Bob" });
 printName({ first: "Alice", last: "Alisson" });
+
+
+// Union Types
+function printId(id: number | string) {
+    if (typeof id === "string") {
+        console.log("Your ID is: " + id.toUpperCase());
+    } else {
+        console.log("Your ID is: " + id);
+    }
+}
+printId(101);
+printId("202");
+// printId({ myID: 22342 }); type error!
+
+function welcomePeople(x: string[] | string) {
+    if (Array.isArray(x)) {
+        console.log("Hello, " + x.join(" and "));
+    } else {
+        console.log("Welcome lone traveler " + x);
+    }
+}
+welcomePeople("hoge");
+welcomePeople(["hoge", "fuga", "piyo"]);
+
+// Type Aliases
+type Point = {
+    x: number;
+    y: number;
+};
+function printCoord2(pt: Point) {
+    console.log("The coordinate's x value is " + pt.x);
+    console.log("The coordinate's y value is " + pt.y);
+}
+printCoord2({ x: 100, y: 100 });
+// printCoord2({ x: 100, y: 100, z: 100 }); type error!
+
+// Interfaces
+interface PointInterface {
+    x: number;
+    y: number;
+}
+function printCoord3(pt: PointInterface) {
+    console.log("The coordinate's x value is " + pt.x);
+    console.log("The coordinate's y value is " + pt.y);
+}
+printCoord3({ x: 100, y: 100 });
+// printCoord3({ x: 100, y: 100, z: 100 }); type error!
