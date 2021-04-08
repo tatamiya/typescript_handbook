@@ -65,3 +65,15 @@ function printCoord3(pt) {
 }
 printCoord3({ x: 100, y: 100 });
 // printCoord3({ x: 100, y: 100, z: 100 }); type error!
+// Literal Types
+function printText(s, alignment) {
+    console.log(s + " is aligned at " + alignment);
+}
+printText("Hello, world", "left");
+// printText("G'day, mate", "centre"); Error!
+// null and undefined
+function liveDangerously(x) {
+    console.log(x.toFixed());
+}
+liveDangerously(1);
+liveDangerously(undefined);
