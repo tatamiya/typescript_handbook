@@ -76,4 +76,4 @@ function liveDangerously(x) {
     console.log(x.toFixed());
 }
 liveDangerously(1);
-liveDangerously(undefined);
+// liveDangerously(undefined);
