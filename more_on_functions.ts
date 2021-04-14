@@ -78,3 +78,50 @@ function makeDate(mOrTimestamp: number, d?: number, y?: number): Date {
 console.log(makeDate(12345678));
 console.log(makeDate(5, 5, 5));
 //console.log(makeDate(1, 3));
+
+// Rest Parameters and Arguments
+function multiply(n: number, ...m: number[]) {
+    return m.map((x) => n * x);
+}
+console.log(multiply(10, 1, 2, 3, 4));
+
+const arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+console.log(arr1.push(...arr2));
+// Same as: console.log(arr1.push(4, 5, 6));
+// Error: console.log(arr1.push([4, 5, 6]));
+console.log(arr1);
+
+// Error: const args = [8, 5];
+const args = [8, 5] as const;
+console.log(Math.atan2(...args));
+
+// Parameter Destructuring
+type ABC = { a: number, b: number, c: number };
+function sum({ a, b, c }: ABC) {
+    console.log(a + b + c);
+}
+sum({ a: 10, b: 3, c: 9 });
+
+// Assignability of Functions
+type voidFunc = () => void;
+const f1: voidFunc = () => {
+    return true;
+};
+const f2: voidFunc = () => true;
+const f3: voidFunc = function () {
+    return true;
+};
+console.log(f1());
+console.log(f2());
+console.log(f3());
+
+const src = [1, 2, 3];
+const dst = [0];
+// forEach method expects a function which returns void
+src.forEach((el) => dst.push(el));
+console.log(dst);
+
+// function f4(): void {
+//     return true;
+// }
