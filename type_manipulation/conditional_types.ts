@@ -48,3 +48,10 @@ declare function stringOrNum(x: string | number): string | number;
 declare function stringOrNum(x: string): number;
 declare function stringOrNum(x: number): string;
 type T1 = ReturnType<typeof stringOrNum>; // string
+
+// Distributive Conditional Types
+type ToArray<Type> = Type extends any ? Type[] : never;
+type StrArrOrNumArr = ToArray<string | number>;
+
+type ToArrayNonDist<Type> = [Type] extends [any] ? Type[] : never;
+type StrOrNumArr = ToArrayNonDist<string | number>;
