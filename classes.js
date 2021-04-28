@@ -126,3 +126,130 @@ class DerivedInitializationOrder extends BaseForInitializationOrder {
     }
 }
 const dInitializationOrder = new DerivedInitializationOrder(); // "base"
+// Member Visibility
+class VisibilityGreeter {
+    greet() {
+        console.log("Hello, " + this.getName());
+    }
+    getName() {
+        return "hi";
+    }
+}
+class SpecialGreeter extends VisibilityGreeter {
+    howdy() {
+        console.log("Howdy, " + this.getName());
+    }
+}
+const g = new SpecialGreeter();
+g.greet();
+// Not allowed: g.getName();
+class BaseProtected {
+    constructor() {
+        this.m = 10;
+    }
+}
+class DerivedProtected extends BaseProtected {
+    constructor() {
+        super(...arguments);
+        this.m = 15; // default is public
+    }
+}
+const dp = new DerivedProtected();
+console.log(dp.m);
+class BaseCrossHierarchy {
+    constructor() {
+        this.x = 1;
+    }
+}
+class Derived1 extends BaseCrossHierarchy {
+    constructor() {
+        super(...arguments);
+        this.x = 5;
+    }
+}
+class Derived2 extends BaseCrossHierarchy {
+    f1(other) {
+        other.x = 10;
+    }
+}
+class BasePrivate {
+    constructor() {
+        this.x = 0;
+    }
+}
+const bp = new BasePrivate();
+// Not allowed: console.log(bp.x);
+// class DerivedPrivate extends BasePrivate {
+//     showX() {
+//         console.log(this.x);
+//     }
+// }
+//class DerivedPrivate extends BasePrivate {
+//    x = 1;
+//}
+class ACross {
+    constructor() {
+        this.x = 10;
+    }
+    sameAs(other) {
+        // No error
+        return other.x === this.x;
+    }
+}
+// Static Members
+class MyClassWithStaticMembers {
+    static printX() {
+        console.log(MyClassWithStaticMembers.x);
+    }
+}
+MyClassWithStaticMembers.x = 0;
+console.log(MyClassWithStaticMembers.x);
+MyClassWithStaticMembers.printX();
+class MyClassWithStaticPrivate {
+}
+MyClassWithStaticPrivate.x = 0;
+// Not allowed!: console.log(MyClassWithStaticPrivate.x);
+class BaseStatic {
+    static getGreeting() {
+        return "Hello world";
+    }
+}
+class DerivedStatic extends BaseStatic {
+    constructor() {
+        super(...arguments);
+        this.myGreeting = DerivedStatic.getGreeting();
+    }
+}
+// Generic Classes
+class Box {
+    constructor(value) {
+        this.contents = value;
+    }
+}
+const box = new Box("hello!");
+// 'this' at Runtime in Classes
+class MyThisClass {
+    constructor() {
+        this.name = "MyClass";
+    }
+    getName() {
+        return this.name;
+    }
+}
+const mtc = new MyThisClass();
+const objmtc = {
+    name: "obj",
+    getName: mtc.getName,
+};
+console.log(objmtc.getName()); // "obj", not "MyClass"
+class MyClassWithArrow {
+    constructor() {
+        this.name = "MyClass";
+        this.getName = () => {
+            return this.name;
+        };
+    }
+}
+const mcwa = new MyClassWithArrow();
+const mcwag = mcwa.getName;
+console.log(mcwag());

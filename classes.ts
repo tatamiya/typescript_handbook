@@ -156,3 +156,127 @@ class DerivedInitializationOrder extends BaseForInitializationOrder {
 }
 const dInitializationOrder = new DerivedInitializationOrder(); // "base"
 
+// Member Visibility
+class VisibilityGreeter {
+    public greet() {
+        console.log("Hello, " + this.getName());
+    }
+    protected getName() {
+        return "hi";
+    }
+}
+class SpecialGreeter extends VisibilityGreeter {
+    public howdy() {
+        console.log("Howdy, " + this.getName());
+    }
+}
+const g = new SpecialGreeter();
+g.greet();
+// Not allowed: g.getName();
+
+class BaseProtected {
+    protected m = 10;
+}
+class DerivedProtected extends BaseProtected {
+    m = 15; // default is public
+}
+const dp = new DerivedProtected();
+console.log(dp.m);
+
+class BaseCrossHierarchy {
+    protected x: number = 1;
+}
+class Derived1 extends BaseCrossHierarchy {
+    protected x: number = 5;
+}
+class Derived2 extends BaseCrossHierarchy {
+    f1(other: Derived2) {
+        other.x = 10;
+    }
+    // Not allowed!
+    //    f2(other: BaseCrossHierarchy) {
+    //        other.x = 10;
+    //    }
+}
+class BasePrivate {
+    private x = 0;
+}
+const bp = new BasePrivate();
+// Not allowed: console.log(bp.x);
+
+// class DerivedPrivate extends BasePrivate {
+//     showX() {
+//         console.log(this.x);
+//     }
+// }
+//class DerivedPrivate extends BasePrivate {
+//    x = 1;
+//}
+
+class ACross {
+    private x = 10;
+    public sameAs(other: ACross) {
+        // No error
+        return other.x === this.x;
+
+    }
+}
+
+// Static Members
+class MyClassWithStaticMembers {
+    static x = 0;
+    static printX() {
+        console.log(MyClassWithStaticMembers.x);
+    }
+}
+console.log(MyClassWithStaticMembers.x);
+MyClassWithStaticMembers.printX();
+
+class MyClassWithStaticPrivate {
+    private static x = 0;
+}
+// Not allowed!: console.log(MyClassWithStaticPrivate.x);
+
+class BaseStatic {
+    static getGreeting() {
+        return "Hello world";
+    }
+}
+class DerivedStatic extends BaseStatic {
+    myGreeting = DerivedStatic.getGreeting();
+}
+
+// Generic Classes
+class Box<Type> {
+    contents: Type;
+    constructor(value: Type) {
+        this.contents = value;
+    }
+}
+const box = new Box("hello!");
+
+// 'this' at Runtime in Classes
+class MyThisClass {
+    name = "MyClass";
+    getName() {
+        return this.name;
+    }
+}
+const mtc = new MyThisClass();
+const objmtc = {
+    name: "obj",
+    getName: mtc.getName,
+}
+console.log(objmtc.getName()); // "obj", not "MyClass"
+
+class MyClassWithArrow {
+    name = "MyClass";
+    getName = () => {
+        return this.name;
+    }
+}
+const mcwa = new MyClassWithArrow();
+const mcwag = mcwa.getName;
+console.log(mcwag());
+
+
