@@ -280,3 +280,159 @@ const mcwag = mcwa.getName;
 console.log(mcwag());
 
 
+// this Types
+class BoxThisTypes {
+    contents: string = "";
+    set(value: string) {
+        this.contents = value;
+        return this;
+    }
+}
+
+class ClearableBox extends BoxThisTypes {
+    clear() {
+        this.contents = "";
+    }
+}
+const a = new ClearableBox();
+const a2 = a.set("hello");
+
+class BoxWithSameAs {
+    content: string = "";
+    sameAs(other: this) {
+        return other.content === this.content;
+    }
+}
+class DerivedBoxWithSameAs extends BoxWithSameAs {
+    otherContent: string = "?";
+}
+const derivedBox = new DerivedBoxWithSameAs();
+const baseBox = new BoxWithSameAs();
+const otherDerivedBox = new DerivedBoxWithSameAs();
+// Error!: derivedBox.sameAs(baseBox);
+derivedBox.sameAs(otherDerivedBox);
+
+class FileSystemObject {
+    isFile(): this is FileRep {
+        return this instanceof FileRep;
+    }
+    isDirectory(): this is Directory {
+        return this instanceof Directory;
+    }
+    isNetworked(): this is Networked & this {
+        return this.networked;
+    }
+    constructor(public path: string, private networked: boolean) { };
+}
+class FileRep extends FileSystemObject {
+    constructor(path: string, public content: string) {
+        super(path, false);
+    }
+}
+class Directory extends FileSystemObject {
+    children: FileSystemObject[];
+}
+interface Networked {
+    host: string;
+}
+const fso: FileSystemObject = new FileRep("foo/bar.txt", "foo");
+if (fso.isFile()) {
+    fso.content;
+} else if (fso.isDirectory()) {
+    fso.children;
+} else if (fso.isNetworked()) {
+    fso.host;
+}
+
+class BoxThisIs<T> {
+    value?: T;
+
+    hasValue(): this is { value: T } {
+        return this.value !== undefined;
+    }
+}
+const thisBox = new BoxThisIs();
+thisBox.value = "Gameboy";
+thisBox.value;
+if (thisBox.hasValue()) {
+    thisBox.value;
+}
+
+// Parameter Properties
+class Params {
+    constructor(
+        public readonly x: number,
+        protected y: number,
+        private z: number,
+    ) {
+        // No body necessary
+    }
+}
+const param = new Params(1, 2, 3);
+console.log(param.x);
+// Error! Private only!: console.log(param.z);
+
+// Class Expressions
+const someClass = class <Type> {
+    content: Type;
+    constructor(value: Type) {
+        this.content = value;
+    }
+};
+const sc = new someClass("Hello, world");
+
+// abstract Classes and Members
+abstract class AbstractBase {
+    abstract getName(): string;
+
+    printName() {
+        console.log("Hello, " + this.getName());
+    }
+}
+// Error!: const ab = new AbstractBase();
+
+class DerivedAbstractClass extends AbstractBase {
+    getName() {
+        return "world";
+    }
+}
+const dac = new DerivedAbstractClass();
+dac.printName();
+
+function greet(ctor: new () => AbstractBase) {
+    const instance = new ctor();
+    instance.printName();
+}
+greet(DerivedAbstractClass);
+// Error!: greet(AbstractBase);
+
+// Relationships Between Classes
+class Point1 {
+    x = 0;
+    y = 0;
+}
+class Point2 {
+    x = 0;
+    y = 0;
+}
+const p2: Point1 = new Point2(); // OK
+
+class Person {
+    name: string;
+    age: number;
+}
+class Employee {
+    name: string;
+    age: number;
+    salary: number;
+}
+const emp: Person = new Employee(); // OK
+// Error!: const per: Employee = new Person();
+
+class Empty { }
+function fn(x: Empty) {
+
+}
+//fn(window); // OK, but doesn't work
+fn({}); // OK
+fn(fn); // OK
